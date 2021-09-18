@@ -47,14 +47,3 @@ const UserSchema = new mongoose.Schema({
 const User = mongoose.model('User',UserSchema)
 
 module.exports = User;
-
-/*cpf:{
-    type: String,
-    minlength: 11,
-    maxlength: 11,
-},
-rg:{
-    type: String,
-    minlength: 11,
-    maxlength: 11,
-},*/
