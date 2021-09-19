@@ -1,19 +1,20 @@
 const mongoose = require('../database')
+const bcrypt = require('bcryptjs')
 
 const UserSchema = new mongoose.Schema({
     name:{
         type: String,
-        require: true,
+        required: [true,'Nome Obrigatório'],
     },
     email:{
         type: String,
         unique: true,
-        required: true,
+        required: [true,'Obrigatório informar email'],
         lowercase: true,
     },
     password:{
         type: String,
-        required: true,
+        required: [true,'Senha Obrigatória'],
         select: false,
     },
     createAt:{
@@ -27,7 +28,7 @@ const UserSchema = new mongoose.Schema({
                 validator: function(v) {
                   return /\d{11}/.test(v);
                 },
-                message: props => `${props.value} não possui 11 digítos`,
+                message: props => `${props.value} não está no formato correto`
             },
             required: [true,'CPF é obrigatório'],
         },
@@ -37,11 +38,19 @@ const UserSchema = new mongoose.Schema({
                 validator: function(v) {
                   return /\d{11}/.test(v);
                 },
-                message: props => `${props.value} não possui 11 digítos`,
+                message: props => `${props.value} não está no formato correto`
             },
             required: [true,'RG é obrigatório'],
         },
     },
+})
+
+UserSchema.pre('save',async function(next){
+    const hash = await bcrypt.hash(this.password,10)
+
+    this.password = hash
+
+    next()
 })
 
 const User = mongoose.model('User',UserSchema)

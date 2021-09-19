@@ -5,11 +5,21 @@ const userController = {
         res.send("Minha primeira rota")
     },
     async register(req,res) {
+        
+        const {email} = req.body
+
         try{
+
+            if(await User.findOne({email}))
+                return res.status(400).send({error: 'Usuário já cadastrado'})
+
             const user = await User.create(req.body)
+
+            user.password = undefined
+
             return res.send(user)
         }catch(err){
-            return res.status(400).send({error: 'Registration failed'})
+            return res.status(400).send({error: `Registration failed ${err}`})
         }
     },
     async a(req,res) {
