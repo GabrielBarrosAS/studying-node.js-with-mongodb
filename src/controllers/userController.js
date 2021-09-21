@@ -7,7 +7,7 @@ function gerarToken(params={}){
     return jwt.sign({id: params},authConfic.secret,{
         expiresIn: 86400,
     })
-
+    
 }
 
 const userController = {
