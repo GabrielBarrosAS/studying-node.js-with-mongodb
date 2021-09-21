@@ -3,7 +3,7 @@ const userController = require('../controllers/userController.js')
 const routes = express.Router()
 
 routes.get('/',userController.req1)
-routes.get('/a',userController.a)
 routes.post('/register',userController.register)
+routes.post('/authenticate',userController.authenticate)
 
 module.exports = routes
