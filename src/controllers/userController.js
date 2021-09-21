@@ -12,10 +12,7 @@ function gerarToken(params={}){
 
 const userController = {
     async  req1(req, res) {
-        //res.send("Minha primeira rota")
-        const usuarios = await User.find();
-
-        return res.json(usuarios)
+        res.send("Primeir site no ar do Gabriel Barros")
     },
     async register(req,res) {
         
