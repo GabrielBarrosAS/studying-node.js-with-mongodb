@@ -1,5 +1,7 @@
 const User = require('../models/user.js')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const authConfic = require('../config/auth.json')
 
 const userController = {
     async  req1(req, res) {
@@ -37,7 +39,11 @@ const userController = {
 
         user.password = undefined
 
-        res.send(user)
+        const token = jwt.sign({id: user.id},authConfic.secret,{
+            expiresIn: 86400,
+        })
+
+        res.send({user,token})
     }
 }
 
