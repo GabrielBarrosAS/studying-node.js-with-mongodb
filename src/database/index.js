@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 
-mongoose.connect('mongodb://mongo:27017/apirest',
+
+const DB_URI = process.env.MONGODB_URI
+mongoose.connect(DB_URI,
                 {useNewUrlParser: true })
                 .then(() => console.log('MongoDB Connected'))
                 .catch(err => console.log(err));
