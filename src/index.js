@@ -14,4 +14,4 @@ app.use('/',userRoutes)
 app.use('/authenticated',authenticatedUserRoutes)
 
 
-app.listen(PORT,HOST)
+app.listen(PORT)
