@@ -3,6 +3,13 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const authConfic = require('../config/auth.json')
 
+function gerarToken(params={}){
+    return jwt.sign({id: params},authConfic.secret,{
+        expiresIn: 86400,
+    })
+
+}
+
 const userController = {
     async  req1(req, res) {
         res.send("Minha primeira rota")
@@ -20,7 +27,7 @@ const userController = {
 
             user.password = undefined
 
-            return res.send(user)
+            res.send({user,token:gerarToken(user.id)})
         }catch(err){
             return res.status(400).send({error: `Registration failed ${err}`})
         }
@@ -39,11 +46,7 @@ const userController = {
 
         user.password = undefined
 
-        const token = jwt.sign({id: user.id},authConfic.secret,{
-            expiresIn: 86400,
-        })
-
-        res.send({user,token})
+        res.send({user,token:gerarToken(user.id)})
     }
 }
 
