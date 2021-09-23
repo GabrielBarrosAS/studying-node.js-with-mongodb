@@ -12,7 +12,7 @@ function gerarToken(params={}){
 
 const userController = {
     async  req1(req, res) {
-        res.send("Primeir site no ar do Gabriel Barros")
+        res.send("Bem vindo")
     },
     async register(req,res) {
         

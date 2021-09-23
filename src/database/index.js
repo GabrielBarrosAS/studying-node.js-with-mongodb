@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-mongoose.connect("mongodb+srv://root:root@cluster0.mu7dp.mongodb.net/nodemongo?retryWrites=true&w=majority",
+mongoose.connect("mongodb://mongo:27017/apirest'",
                 {useNewUrlParser: true })
                 .then(() => console.log('MongoDB Connected'))
                 .catch(err => console.log(err));

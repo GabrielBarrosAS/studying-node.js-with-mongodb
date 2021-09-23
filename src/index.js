@@ -2,7 +2,7 @@ const express = require('express')
 const userRoutes = require('./routes/userRoutes.js')
 const authenticatedUserRoutes = require('./routes/authenticatedUserRoutes')
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 const HOST = '0.0.0.0'
 
 const app = express()
@@ -14,4 +14,4 @@ app.use('/',userRoutes)
 app.use('/authenticated',authenticatedUserRoutes)
 
 
-app.listen(PORT)
+app.listen(PORT,HOST)
