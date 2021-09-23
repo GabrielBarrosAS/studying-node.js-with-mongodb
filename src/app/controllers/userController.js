@@ -1,10 +1,10 @@
 const User = require('../models/user.js')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const authConfic = require('../config/auth.json')
+const authConfig = require('../../config/auth.json')
 
 function gerarToken(params={}){
-    return jwt.sign({id: params},authConfic.secret,{
+    return jwt.sign({id: params},authConfig.secret,{
         expiresIn: 86400,
     })
     
@@ -12,7 +12,10 @@ function gerarToken(params={}){
 
 const userController = {
     async  req1(req, res) {
-        res.send("Bem vindo")
+
+        const users = await User.find()
+        
+        res.send(users)
     },
     async register(req,res) {
         

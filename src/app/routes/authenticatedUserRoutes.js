@@ -5,6 +5,6 @@ const middlewareAuthenticatedUser = require('../middlewares/userAuthenticated')
 const routes = express.Router()
 
 routes.use(middlewareAuthenticatedUser)
-routes.get('/',authenticatedUserController.rotaAutenticadaRaiz)
+routes.get('/authenticated/',authenticatedUserController.rotaAutenticadaRaiz)
 
 module.exports = routes
