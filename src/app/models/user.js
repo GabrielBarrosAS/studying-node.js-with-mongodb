@@ -17,6 +17,19 @@ const UserSchema = new mongoose.Schema({
         required: [true,'Senha Obrigatória'],
         select: false,
     },
+    tokenConfirmationEmail:{
+        type: String,
+        select: false,
+    },
+    tokenConfirmationEmailExpire:{
+        type: Date,
+        relect: false,
+    },
+    emailConfirmed:{
+        type: Boolean,
+        select: false,
+        default: false,
+    },
     createAt:{
         type:Date,
         default: Date.now,

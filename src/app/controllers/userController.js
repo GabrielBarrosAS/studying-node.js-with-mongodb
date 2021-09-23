@@ -2,6 +2,7 @@ const User = require('../models/user.js')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const authConfig = require('../../config/auth.json')
+const crypto =  require('crypto')
 
 function gerarToken(params={}){
     return jwt.sign({id: params},authConfig.secret,{
@@ -13,7 +14,7 @@ function gerarToken(params={}){
 const userController = {
     async  req1(req, res) {
 
-        const users = await User.find()
+        const users = await User.find().select('tokenConfirmationEmail password emailConfirmed tokenConfirmationEmailExpire')
         
         res.send(users)
     },
@@ -29,6 +30,13 @@ const userController = {
             const user = await User.create(req.body)
 
             user.password = undefined
+            
+            const token = crypto.randomBytes(20).toString('hex')
+            const now = new Date()
+            now.setHours(now.getHours()+1)
+
+            user.tokenConfirmationEmail = token
+            user.tokenConfirmationEmailExpire = now
 
             res.send({user,token:gerarToken(user.id)})
         }catch(err){
@@ -50,7 +58,7 @@ const userController = {
         user.password = undefined
 
         res.send({user,token:gerarToken(user.id)})
-    }
+    },
 }
 
 module.exports = userController
