@@ -14,7 +14,7 @@ function gerarToken(params={}){
 const userController = {
     async  req1(req, res) {
 
-        const users = await User.find().select('tokenConfirmationEmail password emailConfirmed tokenConfirmationEmailExpire')
+        const users = await User.find().select('+tokenConfirmationEmail +password +emailConfirmed +tokenConfirmationEmailExpire')
         
         res.send(users)
     },
@@ -27,20 +27,49 @@ const userController = {
             if(await User.findOne({email}))
                 return res.status(400).send({error: 'Usuário já cadastrado'})
 
-            const user = await User.create(req.body)
-
-            user.password = undefined
-            
             const token = crypto.randomBytes(20).toString('hex')
             const now = new Date()
             now.setHours(now.getHours()+1)
 
-            user.tokenConfirmationEmail = token
-            user.tokenConfirmationEmailExpire = now
+            const user = await User.create(req.body)
+
+            const aux = await User.findOneAndUpdate({email},{
+                tokenConfirmationEmail:token,
+                tokenConfirmationEmailExpire:now
+            })
+
+            user.password = undefined
 
             res.send({user,token:gerarToken(user.id)})
         }catch(err){
             return res.status(400).send({error: `Registration failed ${err}`})
+        }
+    },
+    async verificarEmail(req,res){
+
+        const {email,token} = req.body
+
+        try{
+
+        const user = await User.findOne({email}).select('+tokenConfirmationEmail +tokenConfirmationEmailExpire')
+
+        if (! user)
+            return res.status(400).send({error: 'Usuário não cadastrado'})
+        
+        if (user.tokenConfirmationEmailExpire < new Date())
+            return res.status(400).send({error: 'Token Expirado'})//gerar novo token
+        
+        if (!(user.tokenConfirmationEmail === token))
+            return res.status(400).send({error: 'Token inválido'})
+        
+        await User.updateOne({email},{
+            emailConfirmed: true
+        })
+
+        res.send({user})
+
+        }catch(err){
+            return res.status(400).send({error: `Verificação failed ${err}`})
         }
     },
     async authenticate(req,res) {
