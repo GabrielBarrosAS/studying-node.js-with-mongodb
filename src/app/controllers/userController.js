@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const authConfig = require('../../config/auth.json')
 const crypto =  require('crypto')
+const mailer = require('../../modules/mailer')
 
 function gerarToken(params={}){
     return jwt.sign({id: params},authConfig.secret,{
@@ -40,7 +41,18 @@ const userController = {
 
             user.password = undefined
 
-            res.send({user,token:gerarToken(user.id)})
+            //enviar um email com o token de confirmação
+
+            mailer.sendMail({
+                to: email,
+                from: "testeApiNodeMongo@mailer.com",
+                template: "mailerTemplate/verifyEmail.html",
+                context:{token},
+            },(err) =>{
+                return res.status(400).send(err)
+            })
+
+            //res.send({user,token:gerarToken(user.id)})
         }catch(err){
             return res.status(400).send({error: `Registration failed ${err}`})
         }

@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer')
 const hbs = require('nodemailer-express-handlebars')
+const path = require('path')
 
 const transport = nodemailer.createTransport({
     host: "smtp.mailtrap.io",
@@ -12,7 +13,7 @@ const transport = nodemailer.createTransport({
 
 transport.use('compite',hbs({
     viewEngine: 'handlebars',
-    viewPath: __dirname,
+    viewPath: path.resolve("./src/modules/"),
     extName: '.html',
 }))
 
