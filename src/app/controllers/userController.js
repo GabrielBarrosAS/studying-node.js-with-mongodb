@@ -45,14 +45,19 @@ const userController = {
 
             mailer.sendMail({
                 to: email,
-                from: "testeApiNodeMongo@mailer.com",
-                template: "mailerTemplate/verifyEmail.html",
-                context:{token},
-            },(err) =>{
-                return res.status(400).send(err)
+                from: "testApiNodeMongo@email.com",
+                template: "auth/confirma_email",
+                context: {token},
+            },(err) => {
+                if (err){
+                    console.log(err)
+                    return res.status(400).send({error: "Não foi possível enviar email de confirmação"})
+                }
+                    
+                res.send({user,token:gerarToken(user.id)})
             })
 
-            //res.send({user,token:gerarToken(user.id)})
+
         }catch(err){
             return res.status(400).send({error: `Registration failed ${err}`})
         }
